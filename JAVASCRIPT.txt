@@ -1,0 +1,429 @@
+JS is a synchronous single threaded language.
+It is a loosely typed language.
+
+Variable declaration is the process of introducing a new variable to the program.
+Initialization is the process of giving a new value to a variable after its declaration.
+Assignment is the process giving a new value to a variable after both declaration and initialization.
+
+Mutation observer and promises goes in the microtask queue as it have higher priority.
+__________________________________________________________________________________________________________________________________________________________________________
+
+Lexical environment:
+	Lexical environment is the local environment combined with the lexical environment of its parent __________________________________________________________________________________________________________________________________________________________________________
+
+Scope chain:
+	The chain of all the lexical environments of a variable.
+__________________________________________________________________________________________________________________________________________________________________________
+
+Temporal dead zone:
+	The Temporal Dead Zone (TDZ) is a phase during the execution of JavaScript code that occurs between the declaration of a variable and its initialization. During this phase, the variable exists within the scope, but it has not yet been assigned a value.
+__________________________________________________________________________________________________________________________________________________________________________
+
+Shadowing : When an outer scoped variable having the same name as inner scope variable gets its value hidden or shadowed is known as shadowing.
+Illegal shadowing: When a variable declared in the outer scope gets shadowed by a same name variable in the inner scope in the entire global scope
+__________________________________________________________________________________________________________________________________________________________________________
+
+Closure: Function bundles along with its lexical environment/scope is called closure.
+__________________________________________________________________________________________________________________________________________________________________________
+
+Type-conversion: The process of changing a variable from one data type to another.
+
+Implicit-coercion: The automatic conversion of a variable data type to another data type by the programming language runtime.
+Explicit-coercion: The conversion of a variable data-type from one to another manually by the programmer is called explicit coercion.
+
+parseInt() : takes two arguments: the string to parse and an optional radix (base) for the conversion.
+Number() , parseInt() , toString() 
+__________________________________________________________________________________________________________________________________________________________________________
+
+Ternary Operator:
+It is a shortcut or easier way for writing if else statements
+__________________________________________________________________________________________________________________________________________________________________________
+
+Method Chaining:
+	Calling one method after another in one continuous line is called method chaining.
+__________________________________________________________________________________________________________________________________________________________________________
+
+for (initialization; condition; iteration) 
+__________________________________________________________________________________________________________________________________________________________________________
+
+Variable scope: Where a variable is accessible and recognized. 
+
+Any variable declared inside a function will have a local scope.
+Any variable declared outside of a function will have a global scope.
+__________________________________________________________________________________________________________________________________________________________________________
+
+Shallow copy and deep copy are two different approaches to copying objects or data structures in programming. 
+
+Shallow copy : In shallow copy only the top level elements are duplicated. Any changes in the nested elements will change in the original object.
+Deep Copy: In a deep copy, both the top-level structure and all nested structures of the original object are duplicated, creating a completely independent copy.
+__________________________________________________________________________________________________________________________________________________________________________
+
+Spread: Expands an array into separate elements.
+rest: Bundles a number of elements into an array.
+__________________________________________________________________________________________________________________________________________________________________________
+
+callback = a function passed as an argument to another function.
+__________________________________________________________________________________________________________________________________________________________________________
+
+Arrow functions: Concise way to write function expressions. It is used for functions which are used only once.
+__________________________________________________________________________________________________________________________________________________________________________
+
+Destructuring: Used to extract values from array and objects.
+		Suitable for swapping elements in an array.
+__________________________________________________________________________________________________________________________________________________________________________
+
+Sort method sorts in lexicographic order and not alphabetical. ( identifies number , letter and symbols as strings)
+__________________________________________________________________________________________________________________________________________________________________________
+
+Arrow functions:
+	Do not have their own this context. Instead they inherit 'this' from its parent context.
+	They do not have their own argument objects.
+	Arrow functions cannot be used as constructors
+
+Normal functions :
+	They have their own this context.
+	Have their own argument object
+	normal functions can be used as constructors.
+
+  console.log(arguments);
+
+__________________________________________________________________________________________________________________________________________________________________________
+
+Arrow functions are not suitable when : 
+	Using as a function inside an object (where usage of this comes)
+	when the function needs its own this context.
+	when there is a need to create a constructor function.
+	When creating prototype methods.
+__________________________________________________________________________________________________________________________________________________________________________
+
+Prototype:
+ The prototype is a mechanism that allows objects to inherit properties and methods from other objects.
+
+. Every object has its own property called a prototype.
+Because the prototype itself is also another object, the prototype has its own prototype. 
+This creates a something called prototype chain. The prototype chain ends when a prototype has null for its own prototype.
+
+Prototypal inheritance:
+When ever we call or access property / method in an object it will automatically check in the object at first . If it is not present there it will search in the prototype of that object and in this way it will search in the coming prototypes also. This causes prototypal inheritance.
+__________________________________________________________________________________________________________________________________________________________________________
+
+When the JavaScript engine executes the JavaScript code, it creates the global execution context. The global execution context has two phases:
+Creation
+Execution
+
+Hoisting: JavaScript during code execution state moves the variable declarations and function expressions to the top of their respective scopes ,known as hoisting in Js.
+	It will only move up the declaration and not the initialization.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Event propagation:
+	 in JavaScript refers to the mechanism by which events travel through the Document Object Model (DOM) tree to arrive at their target and what happens to them afterward. This process involves two main phases: capturing and bubbling.
+
+Event Capturing Phase
+In the capturing phase, the event starts from the topmost element/root of the DOM tree (usually the document object) and travels down to the target element.
+
+Bubbling phase:
+	In this phase, the event travels back from the target element to the root of the DOM.
+	By default, event propagation follows the bubbling phase.
+	How to stop: event.stopPropagation()
+ 
+can control which phase you want to listen for an event by specifying the third parameter (useCapture) in the addEventListener method. 
+___________________________________________________________________________________________________________________________________________________________________________
+
+Event delegation:
+	It is the process of assigning event listener to the common ancestor of multiple elements rather than to each individual element. And the event is handled accordingly when the events are fired from child elements.
+Improves performance and is memory efficient.
+
+___________________________________________________________________________________________________________________________________________________________________________
+
+Promise: Promise is a placeholder object that represents the eventual completion(or failure) of an asynchronous operation and its result.
+
+await : await operator is used to wait for the response of the promise
+
+States of promise:
+pending: initial state, neither fulfilled nor rejected.
+fulfilled: meaning that the operation was completed successfully.
+rejected: meaning that the operation failed.
+
+___________________________________________________________________________________________________________________________________________________________________________
+
+Promise methods
+
+Promise.All() : 
+	This method takes an array (or iterable ) of promises and returns a single Promise that resolves when all of the promises in the iterable have resolved, or rejects with the reason of the first promise that rejects.
+
+Promise.allSettled():
+	It always resolves, never rejects. The resolved value is an array of objects representing the outcome of each promise in the input array.
+Each object in the resolved array has a status property which is either 'fulfilled' or 'rejected', and a value or reason property accordingly.
+
+Promise.race():
+	Returns a promise that resolves or rejects as soon as one of the promises in the iterable resolves or rejects, with the value or reason from that promise.
+
+Promise.resolve():
+	It returns a resolved promise object.
+
+Promise.reject():
+	It returns a rejected promise object.
+
+Promise.any(iterable): Takes an iterable of Promise objects and, as soon as one of the promises in the iterable fulfills, returns a single promise that resolves with the value from that promise.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Proxy Object: 	
+
+	const proxy1 = new Proxy(target, handler1);
+	It acts as a layer between operations on an object. They are useful for validation and custom behaviour.
+
+target: the original object which you want to proxy
+handler: an object that defines which operations will be intercepted and how to redefine intercepted operations.
+
+get() handler intercepts the reading of the values in the target object.
+set() handler intercepts the writing of the values to the target object field.
+has() check if that field exists in the target object.
+
+const proxyObj = new Proxy(obj , {
+  //s traps
+  get:(target, property)=> {
+    return property in target ? target[property] : 'not there'
+  },
+  set: (target, property, value)=>{
+
+    property in target ? target[property] = value : null
+  },
+  has: (target , property )=>{
+    return property in target
+  }
+})
+___________________________________________________________________________________________________________________________________________________________________________
+
+Both Set and Map are built-in collections in JavaScript introduced in ECMAScript 2015 (ES6) that allow you to store collections of data.
+
+SET:
+const mySet = new Set([1,34.4,3])
+mySet.add()
+mySet.delete()
+mySet.clear()
+mySet.size()
+
+MAP:
+const myMap = new Map([['a',1] ,['b',2 ] , ['c',3] ])
+myMap.set('a',22)
+myMap.delete('a')
+console.log(myMap);
+myMap.clear()
+___________________________________________________________________________________________________________________________________________________________________________
+
+weakSet() and weakMap():
+Both WeakSet and WeakMap are specialized collections in JavaScript that allow you to store weak references to objects.
+Both does not support iteration methods.
+weakSets stores multiple objects as values.
+weakMaps stores multiple key values pairs , where both key value pairs are objects. 
+___________________________________________________________________________________________________________________________________________________________________________
+
+axios interceptors:
+Middleware functions that we can use to modify a axios request / response.
+
+Request Interceptors: These interceptors are invoked right before a request is sent.
+	axios.interceptors.request.use()
+
+Response Interceptors: These interceptors are invoked right after a response is received but before it's passed to the .then() or .catch() callback functions.
+	axios.interceptors.response.use()
+___________________________________________________________________________________________________________________________________________________________________________
+
+axios cancel token:
+	Used to cancel or terminate an axios http request. It is used in cases where a request is no longer needed. Or to prevent multiple requests so that the request will give the latest data only.
+ 
+
+const {token , cancel }  = axios.CancelToken.source()
+	axios.get('url',{canceltoken:token
+.................
+})
+setTimeout(()=>{ cancel('cancelled manually'))})
+___________________________________________________________________________________________________________________________________________________________________________
+
+concurrent code:
+	It is the code designed to run multiple tasks concurrently and not sequentially.
+It is implemented by :using async await , multithreading
+___________________________________________________________________________________________________________________________________________________________________________
+
+keywords are reserved words that have predefined meanings and purposes within the language's syntax and semantics. Keywords are fundamental building blocks of the language and are used to define syntax structures, control flow, data types, and other language features.
+e.g.: if , for , else , break etc
+___________________________________________________________________________________________________________________________________________________________________________
+
+Es6 features:
+1.Arrow functions
+2.spread and rest operator
+3.ternary operator
+4.Template literals
+5.Map and set
+6.Let and const
+7.Destructuring of array and objects
+8.Classes
+9.Promises
+___________________________________________________________________________________________________________________________________________________________________________
+
+Web APIs (Application Programming Interfaces):
+	They are interfaces provided by web servers to interact with their services and access their functionalities. These APIs enable developers to build applications that can communicate with external systems, retrieve data, perform actions, and integrate with various web services.
+E.g.: JSON placeholder api , The movie database APIs
+___________________________________________________________________________________________________________________________________________________________________________
+
+CALL APPLY BIND: They are methods used to manipulate the context where a function is executed.
+
+CALL: The call() method invokes a function with a specified this value and optional arguments provided individually.
+
+APPLY: The apply method invokes a function with a specified this value and optional array of arguments.
+
+Bind: The bind method invokes a function with a specified this value  , but unlike call and apply it do not invoke the function immediately. It can be returned and stored in a variable and can be invoked in the later time.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Function Borrowing: You might need to use methods from one object in the context of another object. call and apply can be helpful in such situations.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Identifier: These are the unique names given to the variables, functions and methods for unique identification in its programming scope.
+
+Literals: It is the assigning of strings, nums, Booleans, to a variable for later use is known as literals.
+	E.g. 	String literals - Both the quotes and the characters within them forms the string literal.
+		num literals - Representation of number itself to a variable is number literal
+	 	Boolean literals - Expression that includes true or false values assigning to a variable
+		template literals - Both the backticks and the characters between them ,also the variables form the template literals.
+		array literal - The square brackets and the comma-separated values inside them form the array literal.
+		Object literals - The curly braces and the key-value pairs inside them form the object literal.
+		regex literals - The forward slashes and the pattern inside them form the regular expression literal.
+
+escape sequence : They are the sequence of characters which starts with a backslash\. They are used to add certain characters and functions in the strings in js.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Optional chaining is a feature in js which prevents any error while accessing an object property , which if doesn't exist or is null or undefined may give an error. so optional chaining prevents the error.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Nullish coalescing operator: It is used in js to provide a default value to a variable while initializing or assigning. If the first value is null or undefined then the second value will be used as the default value.
+??
+___________________________________________________________________________________________________________________________________________________________________________
+ 
+|| Logical or operator : It checks for falsie values or not , if falsie then it will assign the right side value to the variable.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Generator functions: Special type of functions which are able to pause and resume their execution. It retains and maintains its own execution context.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Currying:  transform a function that takes multiple arguments into a sequence of functions, each taking a single argument.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Factory function : Function which returns an object. It is used to return a new object during each invocation.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Application of promise: More readable and efficient code, avoidance of callback hell and problems like pyramid of doom. Also easier error handling using catch block and easy to integrate with several API s and services.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Browser object model:
+	It is the collection of browser-specific objects provided by the browser like.
+Window object
+Navigator object 
+Location object
+History object
+Document object
+Screen object
+___________________________________________________________________________________________________________________________________________________________________________
+
+Primitive data types: They are the simple data types which are provided by the programming language itself. Like string, Boolean, numbers, null, undefined etc.
+	When you manipulate primitive values, you work directly with their values, not with references.
+
+
+Non primitive data types: Complex data types like array, object, function etc which comprises of the primitive data types also. They are also called reference data types.
+	When you manipulate non-primitive values, you work with references to their memory locations.
+
+Primitive types are immutable, while non-primitive types are mutable.
+Primitive types are compared by their value, while non-primitive types are compared by reference.
+
+___________________________________________________________________________________________________________________________________________________________________________
+
+thisArg in map, reduce : 
+	The thisArg parameter in array methods like filter() allows you to specify the value that should be used as the this context when executing the callback function provided to the method. This can be useful when the callback function relies on the this context to access properties or methods.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Deep copy vs shallow copy:
+	They are array and object copying concept in js. 
+Shallow: Copies only the top level elements.
+Deep: Creates an entire new object or array
+___________________________________________________________________________________________________________________________________________________________________________
+
+statically typed languages:
+Variable types are known at compile time, and type checking is performed before the program is executed.
+When you declare a variable, you must specify its type explicitly.
+Once a variable is declared with a certain type, its type cannot change during runtime.
+If you attempt to assign a value of the wrong type to a variable, the compiler will generate a type error.
+
+Dynamic type language:
+Variable types are known at the runtime.
+We don't have to explicitly mention the data type.
+we can assign a different data type to a variable and it will not show a type error.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Single Threaded:
+In a single-threaded environment, there is only one thread of execution.
+All tasks, including I/O operations, computations, and event handling, are processed sequentially on this single thread.
+
+
+Multi-threaded:
+In a multi-threaded environment, multiple threads of execution can run concurrently.
+Each thread operates independently and can execute tasks simultaneously with other threads.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Dead Code elimination: 
+	is a process used by compilers, interpreters, and optimization tools to identify and remove code that is unreachable or unnecessary from a program in its entire run time.
+It improves performance , code efficiency and memory efficiency.
+
+___________________________________________________________________________________________________________________________________________________________________________
+
+Polyfills:
+	Code snippets or libraries that provide modern functionalities and features to old browsers, in which those features are not supported natively.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Object.seal() and Object.freeze() are both methods in JavaScript used to restrict the modification of objects, but they have different levels of restriction.
+
+Object.freeze(): Gets completely immutable.
+Object.seal(): The previously added objects can be edited but cannot be removed or cannot add new properties.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Object.keys(): Returns an array of a given object's enumerable keys.
+Object.values(): Returns an array of a given object's enumerable values.
+Object.entries(): Returns an array of a given object's own enumerable property key-value pairs as arrays.
+Object.assign(): Used to create a new object by adding multiple objects.
+Object.hasOwnProperty(): Returns t/f if a key exists in that object.
+Object.create(): Creates a new object with the specified prototype object and properties.
+Object.getOwnPropertyNames(): Returns an array of all properties 
+Object.getOwnPropertyDescriptors(): Returns all own property descriptors of a given object. Includes writable,enumerable,extensible etc
+Object.is(): Determines whether two values are the same value.
+Object.getOwnPropertySymbols(): Returns an array of all symbol properties found directly upon a given object.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Global This: In JS this refers to the current execution context. 
+In browser : window
+In Node : global
+___________________________________________________________________________________________________________________________________________________________________________
+
+Weak Ref: 
+Feature introduced in ecma which allows providing a weak reference to objects which will not prevent them from being garbage collected.
+const weakRef = new WeakRef(obj)
+
+Weak references can help prevent memory leaks
+___________________________________________________________________________________________________________________________________________________________________________
+
+strict mode: It is a developer feature or tool used to write a cleaner and error free code. Which gives errors to previously ignored errors by the js engine.
+___________________________________________________________________________________________________________________________________________________________________________
+
+eval: Is a global function that allows to execute a JS code which is written as a string.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Normal Array /Dynamic array:
+Arrays which can store any JavaScript values, and the size can be changed. They are dynamic and size changes based on values additions and deletions.
+They store the references of the values stored in the contiguous memory.
+
+Typed Array: Typed Arrays in JavaScript provide a way to work with raw binary data directly in memory. It is used to work with files like multimedia's and which are stored as binary values.
+Fixed length which are specified at the creation and cannot be changed.
+Stores the entire binary data in the contiguous memory for faster access.
+
+const typedArray = new Uint8Array(4)
+___________________________________________________________________________________________________________________________________________________________________________
+
+Symbol() : 
+It represents a unique identifier that is guaranteed to be unique across the runtime environment. Mainly used as keys of objects to prevent naming conflicts.
+___________________________________________________________________________________________________________________________________________________________________________

@@ -1,0 +1,64 @@
+Redis"
+
+Redis is a NoSQL database, different from MongoDB and SQL databases.
+Data in Redis is stored in key-value pairs, making it great for individual data access.
+It is typically used in conjunction with traditional databases like MongoDB or Postgres to improve query performance.
+___________________________________________________________________________________________________________________________________________
+
+
+set name kylee  //This sets the key name with the value kylee in the database.
+
+get age	//This retrieves the value of the key age from the database, which should be 26.
+
+del age		//This deletes the key age from the database.
+
+exists name	//This checks if the key name exists in the database. Since it was set earlier, it should return 1 (true).
+
+exists age	//This checks if the key age exists in the database. Since it was deleted, it should return 0 (false).
+
+
+keys *		//This retrieves all the keys currently stored in the database. It will list name, Home, car, location, father, and mother.
+
+
+ttl name	//This gets the time-to-live (TTL) of the key name. If no expiration time is set, it will return -1.
+
+expire name 15	//This sets an expiration time of 15 seconds on the key name. After 15 seconds, the key name will be automatically deleted.
+
+
+setex bike 10 bullet	//This sets the key bike with the value bullet and an expiration time of 10 seconds. After 10 seconds, the key bike will be automatically deleted.
+___________________________________________________________________________________________________________________________________________
+
+
+lpush friends john	//This command pushes the value john onto the left end of the list stored at the key friends. If the key friends does not exist, a new list is created and john is inserted as the first element. If friends already exists and is a list, john is added to the left end of the list. The command returns the length of the list after the push operation.
+
+The lrange command in Redis is used to retrieve a range of elements from a list. 
+
+lrange friends 0 4  // It gives the 4 values in friends.
+___________________________________________________________________________________________________________________________________________
+
+rpush 	 //This command pushes the value john onto the right end of the list
+
+lpop 	//deleting left most
+rpop	//deleting right most
+
+___________________________________________________________________________________________________________________________________________
+
+SET:
+SADD:  SADD hobbies 'Weight lifting'		// Can only contain unique values,
+						
+SREM:  SREM hobbies 'Weight lifting'		//Removing from a set
+
+SMEMBERS hobbies				//Show all members in hobbies
+___________________________________________________________________________________________________________________________________________
+
+Hashes:
+
+HSET person name kyle
+HGET person name	
+HGETALL person
+HDEL person age
+HEXISTS person name
+___________________________________________________________________________________________________________________________________________
+
+const Redis  = require('redis')
+const clilent = Redis.createClient()

@@ -1,0 +1,422 @@
+Redux: A Predictable State Container for JS Apps.    Open source javascript state management library.
+
+Makes complex application easier , by providing consistent data across application.
+
+Predictable:
+Redux helps you write applications that behave consistently, run in different environments (client, server, and native), and are easy to test.
+
+Debuggable: 
+Easily Debuggable by using redux devtools to trace when where how and why about application state.
+
+Centralized:
+Provides a centralized store for our applications state and logic , which enables to create features like undo/redo and more.___________________________________________________________________________________________________________________________________________________________________________
+
+3 Core concepts of redux:
+
+Store: Holds the entire state of our application and keeps track of it.
+	It is an object containing the individual states of entire application.
+
+Action : Describes what happened in the application.
+	 Only way to change a state is to dispatch an action , where action is an object having one 'type' property.   action = { type: ICE_ORDERED,
+																  payload: 88  }
+
+Reducer : Ties the store and action together.
+	To specify how the state in store should be updated based on the actions dispatched. 
+	Function that accepts previousState and action as arguments and returning newState.
+
+Action Type:	const INCREMENT = 'INCREMENT';
+Action Creator:   const incrementActionCreator = (amount) => {
+					  return {
+ 					 type: INCREMENT,
+   					 payload: { amount },
+  						};
+					   };
+
+Action:   const incrementAction = {
+ 	  type: INCREMENT,
+  	  payload: { amount: 1 },
+	   };
+___________________________________________________________________________________________________________________________________________________________________________
+
+State of an app is the state shared by all the components in the application together.
+		
+Redux Toolkit:
+Standard way to write Redux logic and code. 
+Redux Toolkit simplifies the process of working with Redux by providing utilities and conventions that reduce boilerplate code making it a more developer-friendly option for state management in JavaScript applications.
+Code splitting.
+In redux we will have to install lots of packages before being able to do a simple feature , but redux toolkit makes it easier.
+Easy to configure redux using redux toolkit.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Action creators: 
+In redux action creators are functions which create and returns the action object when it is called. 
+
+bindActionCreators:
+Is a function in redux used to bind action creators with the dispatch function.
+	
+	const actions = bindActionCreators({order_cake , restock_cake ,order_ice , restock_ice} , store.dispatch)
+	actions.orderCake()
+___________________________________________________________________________________________________________________________________________________________________________
+
+createStore:
+
+It is a fundamental function in redux to create a redux store which is responsible for holding the state of your application and provides methods to interact with the state.
+	const store = createStore(reducerFunction)
+
+The methods provided by createStore are:=
+
+1.getState() : Returns the current state of the redux store.
+		
+		store.getState()
+
+2.subscribe() : Listener functions:: Adds a change listener to the store. The listener will be called whenever an action is dispatched and there is a change in the store .
+		It returns an unsubscribe function which is used to unsubscribe from the store change listenters.
+		
+		const unsubscribe = store.subscribe(()=>{  log some required log related to changing state  })
+3.dispatch() : 
+	store.dispatch({type:'INCREMENT'})
+	dispatch function accepts an action object as argument.
+
+4.replaceReducer(): Used to replace the current reducer function with a new reducer function. Used for code splitting.
+		store.replaceReducer(newReducer)
+
+These methods allow you to create a new store , get the current state of the store , dispatch an action to modify the state in store , listen to changes happening in the store by subscribe method which is a listener function , and using unsubscribe method to remove listening to changes in the store which also prevents memory leak.
+___________________________________________________________________________________________________________________________________________________________________________
+
+configureStore(): { Built over createStore in redux toolkit }
+		 It is a function provided by redux toolkit which wraps the createStore and it simplifies the configuration process and provides a good default.
+	
+const store = configureStore({
+  reducer: rootReducer,   					// to specify the root reducer which combines all the reducers.
+
+  middleware:(getDefaultMiddleware)=>{ getDefaultMiddleware().concat(extraMiddleware , extraMiddleware2, ...)  
+								// configureStore will automatically pass those to applyMiddleware.
+								// adds redux-thunk by default,
+
+  devTools: process.env.NODE_ENV !== 'production',		// To specify weather to use redux devtools or not
+
+  preloadedState: { our app initial state } , 			// To provide an initial state to the redux store.
+	
+  enhancers:(getDefaultEnhancers) => getDefaultEnhancers().concat(offline(offlineConfig)),
+								// Used to enhance the store by adding functions as arrays.
+  
+});
+___________________________________________________________________________________________________________________________________________________________________________
+
+combineReducers():
+	Used to combine multiple reducers together for making a common reducer.
+
+	const rootReducer = combineReducers( {  counter: counterReducer,  user: userReducer,  } );
+___________________________________________________________________________________________________________________________________________________________________________
+
+1. Define constant
+2. Define action creator which returns an action object.
+3. Define the reducer to handle the action.
+4. Create a store by using createStore and by giving the reducer as argument.
+5. Subscribe to use a listener function whenever a change occurs or a dispatch is called and state change occurs in the store.
+6. Use dispatch method to carry out an action 
+7. Unsubscribe after dispatch.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Immer : 
+	Immer is a library used in redux while updating a state value from inside the reducer function. It is used in the cases where there are nested objects whose values are to be changed.
+
+Immer is designed to simplify the process of working with immutable data structures.
+
+import produce from 'immer';
+
+return produce(state,(draft)=>{ draft.users.name : action.payload })
+___________________________________________________________________________________________________________________________________________________________________________
+
+Middleware: Using middleware is the suggested way to extend redux with custom functionalities and features.
+It helps to handle , modify or intercept the action which has been dispatched before it reaches the reducer funtion.
+
+Used for logging , crash reporting , performing async tasks.
+
+const myMiddleware = (store) => (next) => (action) => {
+  console.log('Middleware triggered:', action);
+
+  // Pass the action to the next middleware or the reducer
+  return next(action);
+};
+return produce(store ,draft)=>{
+
+
+import createLogger from 'redux-logger';
+const logger = createLogger()
+___________________________________________________________________________________________________________________________________________________________________________
+
+applyMiddleware() : Function in redux used to apply middleware to the store to enhancing  the action dispatched through the dispatch function before it reaches the reducer.
+
+const store = createStore(
+  rootReducer,
+  applyMiddleware(myMiddleware)
+);
+
+___________________________________________________________________________________________________________________________________________________________________________
+
+slice:  (portion of the Redux state
+	A "slice" refers to a portion of the Redux state. It's a way to modularize and organize the state in a Redux store.
+	A slice usually consists of a reducer function and the corresponding actions that can be dispatched to modify that specific part of the state. By dividing the state into slices, you can better structure your code, improve maintainability, and make it easier to reason about the application's behavior.
+
+A slice contains name , actions , reducer function , iniitial state.
+
+createSlice .. under the hood uses immer library for assigninng values or changing values of a nested object state. So we dont have to separately install immer library.
+
+const slice = createSlice({
+  name:'name',
+  initialState,`
+  reducers:{
+    ordered:(state)=>{
+      state.numOfCakes--
+    },
+    restocked:(state)=>{
+      state.numOfCakes+=1
+    }
+  }
+})
+___________________________________________________________________________________________________________________________________________________________________________
+
+createReducer: When we use create slice it uses createReducer under the hood. createReducer is used to create and specify reducers
+
+const counterReducer = createReducer(initialState, {
+  increment: (state) => {
+    state.value += 1;
+  },
+  decrement: (state) => {
+    state.value -= 1;
+  },
+  reset: (state) => {
+    state.value = 0;
+  },
+});
+___________________________________________________________________________________________________________________________________________________________________________
+
+createSlice :
+It is another utility provided by Redux Toolkit that further simplifies the process of defining reducers, action creators, and action types.
+It specifically reduces the amount of boilerplate codes.
+
+const slice = createSlice({
+  name:'name',
+  initialState,
+  reducers:{
+    ordered:(state)=>{
+      state.numOfCakes--
+    },
+    restocked:(state)=>{
+      state.numOfCakes+=1
+    }
+  }
+})
+
+______________________________________________________________________________________________________________________________________________________________________
+
+redux-thunk:
+	popular middleware used in the redux to handle asynchronous action creators.
+It is used to write action creator that returns function which carries out async tasks instead of action objects.
+This function can then perform asynchronous operations, such as making API calls, before dispatching the actual action to the store.
+
+const thunkMiddleware = require('redux-thunk').default
+const store = createStore(reducer , applyMiddleware(thunkMiddleware))
+___________________________________________________________________________________________________________________________________________________________________________ 
+
+Redux Toolkit library:
+	Redux toolkit is the official opinionated , batteries included toolset for efficient Redux develepment.
+___________________________________________________________________________________________________________________________________________________________________________ 
+
+extraReducers:
+When you create a slice using createSlice, you can use the extraReducers option to add additional reducer logic outside of the standard reducers field. This is useful for handling actions from other slices or global actions.
+
+
+It allows createSlice to respond to other action types besides the types it has generated.
+
+
+iceCream reducer can only update the number of iceCreams but it can still respond to cake orderd action type. In redux reducers.
+While in redux-toolkit we are creating A slice and after adding reducer key in the object we add extraReducers
+
+IN REACT TOOLKIT SLICE we can add extra reducer like extraReducers{ ['cake/ordered'] : (state)=> state.numberOfIcecreams-- }
+
+		B U T           W E            P R E F E R             U S I N G      BUILD   METHOD	
+
+	extraReducers:(builder)=>{ 
+			builder.addCase(cakeActions.ordered , (state)=> state.numOfIcecream-- ) 
+				}
+
+
+const mySlice = createSlice({
+  name: 'mySlice',
+  initialState: {
+    // initial state here
+  },
+  reducers: {
+    // regular reducers go here
+    increment: (state) => {
+      state.value += 1;
+    },
+    decrement: (state) => {
+      state.value -= 1;
+    },
+  },
+  extraReducers: (builder) => {
+    // additional reducers go here
+    builder
+      .addCase(someOtherAction, (state, action) => {
+        // handle someOtherAction
+      })
+      .addCase(anotherAction, (state, action) => {
+        // handle anotherAction
+      });
+  },
+});
+
+
+___________________________________________________________________________________________________________________________________________________________________________ 
+
+createAsyncThunk:
+	 It is commonly used with the Redux Toolkit to handle asynchronous operations, such as making API calls.
+	Special functionality of createAsyncThunk is that it will automatically dispatch lifecycle actions based on the returned promise. The promise is either pending , fulfilled or rejected.
+
+And these reducers are added as a extraReducer and not as a reducer as it is not created by the createSlice method.
+	
+The async function created by createAsyncThunk generates 3 actions and when it is dispatched it works with respect to the promise life cycle actions : pending,fulfilled or rejected.
+
+createAsyncThunk under the hood uses the redux-thunk library.
+
+___________________________________________________________________________________________________________________________________________________________________________
+
+PROJECT SETUP:
+/
+		npm create vite@latest react-rtk-demo
+\
+___________________________________________________________________________________________________________________________________________________________________________
+
+Provider Component: 
+	This component is important for integrating react applications with redux.
+The provider wraps our entire React application and takes a 'store' prop which is the redux store you have created using the createStore function from Redux.
+So by wrapping the app with the Provider component , it makes the redux store available to all components without passing the store as props for each components wrapped in the Provider component.
+
+  <Provider store={store}>
+    <App />
+  </Provider>
+
+Provider component uses react Context under the hood and carries out similar functionality like useContext.
+___________________________________________________________________________________________________________________________________________________________________________
+
+useSelector:
+	The useSelector is a hook provided by the react-redux library, which is commonly used with React applications to get hold of any state maintained by the redux store.
+It takes a function as an argument, often referred to as a selector function.
+
+The selector function receives the entire Redux state as its argument, and you can return a specific piece of the state that your component needs.
+
+
+const numberOfUsers = useSelector((state)=> state.user.numOfUsers )
+___________________________________________________________________________________________________________________________________________________________________________
+
+useDispatch:
+
+useDispatch is a hook provided by the React-Redux library that gives you access to the dispatch function from the Redux store. It is commonly used in React functional components to dispatch actions and trigger state changes in a Redux application.
+___________________________________________________________________________________________________________________________________________________________________________
+
+redux - devtools:
+	It is a set of develepor tools in redux which helps to inspect and debug the entire redux application.
+It provides a visual interface to track the state and actions in your Redux store, making it easier to understand the flow of data and identify potential issues.
+
+Time-Travel Debugging:
+You can move backward and forward through the state changes in your application, allowing you to inspect the state at different points in time.
+
+For Inspect Actions , Inspect State 
+It gives proper graphical representation of the entire store which includes the state and actions.
+
+composeWithDevTools : 
+Redux devtools can be integrated with middlewares to enhance the debugging capability by using a package called 'redux-devtools-extension' which provides composeWithDevTools.
+___________________________________________________________________________________________________________________________________________________________________________
+
+JWT : JSON web token :
+ It is a URL safe and secure method of transmitting information between two parties. It is mainly used for authorization and authentication purpose in web application.
+ 
+Consists of three parts:
+
+1.Header: Consists of two parts  the type and signing algorithm.
+	Example Header: {"typ": "JWT", "alg": "HS256"}
+
+2. payload:  Payload contains the claim (information related to user) And it is of 3 types. Registered , private , public 
+
+3. signature: To create signature it takes the encoded header , encoded payload , a secret , algorithm specified in the header and sign that.
+		It creates a JWT string.
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiAiMTIzNDU2Nzg5MCIsICJuYW1lIjogIkpvaG4gRG9lIiwgImV4cCI6IDE1MTYyMzkwMjJ9.3zLPJpCokImIemkn01vzQGq6pLzT0Rofe4mq3LfXWL8
+
+The JWT strings consisting of header , payload and signature are separated by '.' 
+___________________________________________________________________________________________________________________________________________________________________________
+
+ express-async-handler:
+	express-async-handler is a middleware for Express.js that simplifies error handling in asynchronous route handlers. It allows you to write asynchronous route handlers without explicitly wrapping every asynchronous function with a try-catch block.
+
+import asyncFunction from 'express-async-handler'
+___________________________________________________________________________________________________________________________________________________________________________
+
+process.exit(1):
+ Node.js it is used to forcefully terminate the Node.js process with a specified exit code. In this case, 1 is the exit code.
+	Exit code 0 usually means a successful termination.
+	Non-zero exit codes (e.g., 1 in this case) typically indicate an error or abnormal termination.
+___________________________________________________________________________________________________________________________________________________________________________
+
+const exampleSchema = new mongoose.Schema({
+  // Basic definition of the 'name' field as a String
+  name: {
+    type: String,
+
+    // The field is required, meaning it must have a value
+    required: true, 
+
+    // Removes leading and trailing whitespaces from the input string
+    trim: true,
+
+    // Sets the minimum length constraint for the string
+    minlength: 3,
+
+    // Sets the maximum length constraint for the string
+    maxlength: 50,
+
+    // Restricts possible values to a predefined set
+    enum: ['John', 'Jane', 'Doe'],
+
+    // Custom validation function to ensure only letters are allowed
+    validate: {
+      validator: function(value) {
+        return /^[a-zA-Z]+$/.test(value);
+      },
+      message: 'Name must contain only letters.'
+    },
+
+    // Sets a default value if no value is provided
+    default: 'Unknown',
+
+    // Converts the string to lowercase
+    lowercase: true,
+
+    // Adds an index to the field for better query performance
+    index: true
+  }
+});
+___________________________________________________________________________________________________________________________________________________________________________
+
+express.json(): 
+	This middleware parses incoming JSON data. When a request with a JSON body is received, this middleware parses the JSON data and makes it available in 
+req.body. This is useful when working with APIs that send JSON data in the request body.
+
+
+express.urlencoded({ extended: true }): 
+	This middleware parses incoming URL-encoded form data. It is commonly used with HTML forms that submits in urlencoded format. 
+The extended: true option allows for parsing complex objects and arrays from the form data.
+___________________________________________________________________________________________________________________________________________________________________________
+
+cookies {
+  jwt: 'eyJhbGciIkpXVCJ9.3hlkjh4l3k32.OW3Hw3nfe8Gxc'
+}
+___________________________________________________________________________________________________________________________________________________________________________
+
+npm concurrently is a package that allows you to run multiple npm scripts concurrently. It is particularly useful in the context of web development, where you might have multiple tasks to perform simultaneously, such as starting a server and a client application.
+
+* Useful for fullstack development
+* NO need of multiple terminals to run different scripts.

@@ -1,0 +1,436 @@
+										NODE JS
+
+Node.js® is an open-source, cross-platform JavaScript runtime environment.
+Open source- Source code is openly available for sharing and modification.
+Cross-platform- Available for mac, windows and Linux.
+
+JavaScript engine converts JavaScript code to a machine understanding code, that allows the computer to run specific tasks.
+
+JavaScript runtime environment: 
+	It is an environment needed for running a js code which includes JS engine, webAPIs, callback queue, microtask queue and an event loop.
+	And Dependencies include libuv, v8, zlib, crypto etc
+
+C++ is designed to carry out functionalities related to network and file systems.
+___________________________________________________________________________________________________________________________________________________________________________
+
+REPL : Read Evaluate Print Loop 
+	Can be used in terminal.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Modules: Reusable chunk of codes that have its own context.
+	In Node.js each file is treated as a module.
+
+	Local Module: The modules which are created by us in our application.
+	Built in Module: The modules which are already present in the node js like fs, https etc
+	Third party modules: The modules which are created by other decvelepors that we can use in our application.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Common JS is a standard that states how a module have to be structured and shared. 
+Each module is wrapped with in IIFE that gives it a private scope.
+
+A module is an IIFE which contains arguments such as module, require, __dirname, __filename, exports) that's how we can access all these by default.
+___________________________________________________________________________________________________________________________________________________________________________
+module caching:
+	Module caching is a technique used in programming to improve performance by storing the results of expensive operations or computations so that they can be reused later without re-executing the operation. 
+___________________________________________________________________________________________________________________________________________________________________________
+
+PATH:
+isAbsolute : Checks if the path is absolute, means it is starting from root or not.		path.isAbsolute('c:\\Users')
+resolve(): Returns a resolved absolute path by removing unnecessary symbols and /\ making it an absolute path.			
+join(): joins the path given to it.
+basename()
+extname()
+parse(): parse a given p2ath into an object containing its various components
+format(): opp to parse, return a path string from an object.
+___________________________________________________________________________________________________________________________________________________________________________
+
+EVENTS:
+const EventEmitter = require('events')
+const emitter = new EventEmitter()
+emitter.on() ------ emitter.emit()
+___________________________________________________________________________________________________________________________________________________________________________
+
+Character will be converted to a number then to a binary representation.
+
+UTF 8 encoding suggests to represent a character in 8bytes,
+
+Stream: Sequence of data being moved from one point to another.
+	Readable stream
+	Writable stream
+	Duplex Stream
+	Transform streams- Modify the data as it is written or read.(file compression, encryption)
+buffer is a temporary memory storage for a chunk of data that is to be transferred.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Content-Type:
+1. text/plain
+2. text/html:
+3. application/json:
+4. multipart/form-data:
+___________________________________________________________________________________________________________________________________________________________________________
+
+Nodejs is made asynchronous using libuv.
+libuv: libuv is a multi-platform, open source, c library that provides asynchronous features and functionalities to work with network requests and responses, and also for file system interactions we use libuv. It assigns task to the v8 engine.
+Libuv has default 4 threads.
+
+process.env.UV_THREADPOOL can be used to adjust the thread pool size.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Event Loop:
+	It is a C program that controls the execution of the synchronous and asynchronous tasks in NodeJS.
+
+	[ nextTick queue -> Promise queue ] -> Timer queue  -> I/O queue  -> check queue -> close queue 
+___________________________________________________________________________________________________________________________________________________________________________
+
+IO Polling in IO queue:
+	I/O polling is a method where the event loop continuously checks for new callbacks in each queue.
+It initiates the i/o queue.
+
+setImmediate:  used to schedule a callback function to be executed in the next iteration of the event loop.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Versioning: semVer(semantic versioning ) : Widely adopted versining systems
+	major version . minor-version . patch
+	if made a minor change and it is backward compatible then minor version increases.
+	
+if made a major change and it is not backward compatible then major version increases major version.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Cluster module:	Used to run multiple instances of Node.js that can distribute workloads among their application threads. Leads to load balancing. Runs on same port	
+___________________________________________________________________________________________________________________________________________________________________________
+
+child-processes: They are the processes created by another process mainly called parent process. They are created to run multiple processes concurrently without blocking each other.
+Child processes communicate with the main process through inter-process communication (IPC) channels, allowing them to exchange data and coordinate tasks.
+
+Master is only in charge of the workers.
+spawn , fork , exec , execFile can be used to create child processes.
+
+exec and exec files are carried out using buffer while spawn is done as stream which gives more control.
+
+exec:
+ function is used to asynchronously execute shell commands from within a Node.js application. 
+
+execFile
+ Function used to execute external application or scripts with a set of arguments from your NodeJS application.
+
+spawn
+ Used to launch an external process like exec and execFile but it gives more control over the process in real time. It can be used to create any type of process.
+
+fork
+ Fork is used to create child processes that run on different instances of node js.
+ It is used to create new processes of the node js instance itself.
+___________________________________________________________________________________________________________________________________________________________________________
+
+worker_thread modules: Used to run multiple threads in a single NodeJS instance. When there is no need of separate instances of v8, event loop and memory, we can use worker thread modules.
+
+If the task is a time consuming task then it is moved to a new worker thread.
+
+const {Worker} = require('worker_threads')
+const worker = new Worker('file.js')
+
+worker.on("message from file.js",(j)=>{ log message})
+
+in the file.js we use:
+ parentPort.postMessage(message,'message or variable here')
+___________________________________________________________________________________________________________________________________________________________________________
+
+Pug and Handlebars are both popular templating engines used in web development to generate dynamic HTML content on the server-side. 
+___________________________________________________________________________________________________________________________________________________________________________
+
+Status code: Status codes are the standardized response given from the server to client to tell about the status of a client request.
+
+1xx Informational Response:
+
+2xx success
+	200 OK
+	201 created
+	204 no content
+
+3xx Redirection 
+
+4xx Client errors
+	400 Bad Request
+	401 Unauthorized
+	402 payment required
+	403 Forbidden
+	404 Not Found
+
+5xx Server errors
+	500 Internal Server error
+	502 Bad geteway	
+___________________________________________________________________________________________________________________________________________________________________________
+
+___________________________________________________________________________________________________________________________________________________________________________
+
+										E  X  P  R  E  S  S 
+
+Express is a popular web application framework for NodeJS
+
+Routing : Refers to determining how a server responds to client request to a particular URL endpoint.
+
+HTTP methods:
+GET: Used to request data from the server.
+POST: Used to submit data to the server from the client.
+PUT: Used to update an existing data in the server entirely.
+PATCH: Used to update an existing data in the server partially.
+DELETE: Used to remove/ delete an existing data from the server.
+___________________________________________________________________________________________________________________________________________________________________________
+
+app.use: Used to mount middleware at a specific path in the middleware stack of express.
+	They are also used for static file assigning.\
+	Error handling
+___________________________________________________________________________________________________________________________________________________________________________
+
+Timer queue: They are the queue in which time dependent methods using setTimeout and setInterval are scheduled in the event loop which schedules callbacks when time delay is over. They schedule the callbacks based on the given time.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Microtask queue: It is a queue in js event loop where asynchronous tasks are queued which have a higher priority than tasks scheduled in the call back queue.
+	Some eg are mutation observer and promises.
+These tasks are scheduled to execute as soon as possible after the current execution in the call stack has finished.
+___________________________________________________________________________________________________________________________________________________________________________
+
+set Immediate(): It basically work during the next iteration of the event loop after the i/o queue. But it works before setTimeout in most cases as setTimeout has a default time of 4 ms.
+___________________________________________________________________________________________________________________________________________________________________________
+
+process.nextTick(): This method has the highest priority in the event loop and is executed in the next iteration of the event loop before the i/o queue and even the timer queue. It is actually asynchronous method which works immediately after the current call stack has become empty after execution.
+
+___________________________________________________________________________________________________________________________________________________________________________
+
+spawn and fork : Are both methods to create child processes , spawn- to create any new child processes while fork- for creating a new node js process or instance.
+	fork has the feature for IPC (inter-process comunication) which helps to communicate with the child process and the master process.
+while spawn communicates using standard input/output streams.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Buffer: Buffer is a temporary data storage area used to hold data while it's being transferred from one place to another. 
+___________________________________________________________________________________________________________________________________________________________________________
+
+Pipe : It is an readable streams method used to chain a readable stream to a writable stream to transefer data from one file to an output file.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Threadpools: Threads are used for task concurrency , but using too much threads can cause problems like overloading the cores and crashing the machine, So to prevent that we use threadpool.
+	
+so by using threadpool it controls or limits the number of threads created by taking in care of the number of cup's available. 
+which in turn maintains concurrency over tasks by using the hardware's capacity to the fullest without overwhelming cores.
+
+It helps for reusing thread after a thread has been used it can be reused again for other tasks.
+
+___________________________________________________________________________________________________________________________________________________________________________
+
+Synchronous tasks are handled in the main thread, while async in event loop, using libuv and threadpool.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Libuv controls [ event loop , main thread for async , thread pools for blocking ] 
+___________________________________________________________________________________________________________________________________________________________________________
+
+Event driven programming: It is a programming paradigm where flow of the program is determined by multiple number of events that works asynchronously.
+___________________________________________________________________________________________________________________________________________________________________________
+
+API versioning : Process of managing different versions of API's which maintains backward compatibility.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Rate limiting : To limit the rate of http requests to a server, which helps to reduce the server load due to multiple requests.
+Debouncing: It restricts the number of frequent triggering of events and functions , by triggering only when the difference between two event triggering is a certain time.
+
+Throttling: It restricts a new event or function call after the current event is triggered, for a specified limit of time. All other event calls between these time is ignored.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Accept :> http header that a client includes in their request header to specify what all are content types they accept as response.
+	eg:- Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+___________________________________________________________________________________________________________________________________________________________________________
+
+content-negotiation: The server looks up the clients specification on the response data types and their capabilities to give a proper response to the client.
+	Client-driven content negotiation: This allows the client to control the type of content it receives.
+	Server-driven content negotiation: This allows the server to control the type of content it sends.
+___________________________________________________________________________________________________________________________________________________________________________
+
+process and thread: Each process has its own thread.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Design patterns: They are the different methods to represent a programmes code which enables a structure, standard, scalability and code readability.
+	Most common are: Module Pattern, repository pattern, observer pattern , middleware pattern etc.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Static folder:
+	Directory that contains static assets such as HTML, CSS, JavaScript, images, fonts, and other files that are served directly to clients without any processing or modification by the server.
+___________________________________________________________________________________________________________________________________________________________________________ 
+
+environment variables: contains configuration settings specific to the environment in which the application is running like port number, database connections strings and other private keys and dynamic values which are needed during the runtime.
+require('dotenv').config();
+___________________________________________________________________________________________________________________________________________________________________________
+
+error first callback: This convention specifies that the first argument passed to a callback function should be reserved for an error object, if an error occurs during the 	asynchronous operation.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Res.write(): Used to send text type data from the server to the client as a response to a request.
+Res.end(): It is used to specify the end of a response send to a client.
+
+Res.send() : It is used to send a response to the client containing various type of data without mentioning explicitly.
+	It is a higer level method provided by express.js.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Authentication:
+Authentication is the process of verifying the identity of a user or entity attempting to access a system or resource.
+It confirms that the user is who they claim to be by validating their credentials, such as username/password, etc.
+
+Authorization:
+Authorization, also known as access control, is the process of determining what actions or resources a user or entity is permitted to access or perform within a system or application.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Middleware: Middleware functions are functions that have access to the request object (req), the response object (res), and the next middleware function in the application’s request-response cycle. 
+
+Types of middleware:
+1.Error handling middleware  (err, req, res, next)):
+
+2.Application level middleware	  MIddlewares taking place in each req res. Like authentication middleware
+
+3.Router level middleware	app.use("/", user_route);
+
+4.Built-in middleware	app.use(express.json());     app.use(express.urlencoded({extended:true}));     app.use(express.static('public'));
+
+5.Third-party middleware	app.use(morgan())
+___________________________________________________________________________________________________________________________________________________________________________
+
+app.all:  It allows you to define middleware that should run regardless of the HTTP method used in the request.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Chaining: A method in programming where a new method is called at the result of the previous method and it is continued for one or more methods.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Process object : The process object in Node.js provides information over the current Node.js process. 
+ 		It is a global object , available in all modules.
+
+process.argv: An array containing the command-line arguments passed to the Node.js process. 
+
+process.env: An object containing the user environment variables. 
+
+process.cwd(): A method that returns the current working directory of the Node.js process.
+
+process.pid: A property that returns the process ID (PID) of the Node.js process.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Process manager: It is used to run multiple process instances at a time concurrently.
+	process management, load balancing, logging, monitoring, and more.
+___________________________________________________________________________________________________________________________________________________________________________
+
+CORS: If two webapps having two different origins then they need to follow CORS mechanism.
+1. preflight call (options call)
+2. Origin-2 verifies the preflight call
+3. If valid it will send some http headers to Origin-1
+4. Then actual call to Origin-2
+
+const cors = require('cors')
+app.use(cors({origin:['www.google.com'],method:['GET']} )
+___________________________________________________________________________________________________________________________________________________________________________
+
+payload : Any data transferred over a network is called payload.
+___________________________________________________________________________________________________________________________________________________________________________
+
+CSRF: Cross site resource forgery
+	It is a security vulnerability for the users using internet applications which are misused by hackers to send false requests from the users webapp to the official server. Where the server thinks the request is from the authorised user.
+
+It is prevented by implementing csrf tokens, which are send as a response from the server through each response. And then the next request should contain this CSRF token or else the request will be considered as a CSRF threat.
+___________________________________________________________________________________________________________________________________________________________________________
+
+HTTP Request:
+	Specifies HTTP method , the URL / URI , request-Headers , content-type , request-Body(optional)
+
+HTTP Response:
+	Specifies the Status code ,Response Headers , Response Body
+___________________________________________________________________________________________________________________________________________________________________________
+
+Cron-job:
+	A cron job is a scheduled task or job that runs automatically at specified intervals on Unix-like operating systems, such as Linux and macOS.
+	used for automating repetitive tasks, such as system maintenance, backups etc.
+___________________________________________________________________________________________________________________________________________________________________________
+
+DDOS: Distributed denial of service 
+The goal of a DDoS attack is to overwhelm the target's server with large number of requests, causing it to become unavailable to legitimate users.
+
+
+fs.stat(): It is an fs module method which is used to get details and specification about a file.
+	stats.isFile() 		Returns weather a regular file or not
+	stats.isDirectory() 	Returns weather a directory or not
+	stats.size		Returns the size of the file in bytes
+___________________________________________________________________________________________________________________________________________________________________________
+
+- fs: getting list of files in a directory
+	fs.readDir(__dirname,(err,files)=>files))
+___________________________________________________________________________________________________________________________________________________________________________
+
+Symbolic Link / symlink/ softlink:
+	It is special type of files that provides or stores the reference to a different file or directory. It acts as a pointer to the target file or directory.
+
+___________________________________________________________________________________________________________________________________________________________________________
+
+exit code:
+It is the status code sent by a program to the OS on termination. From 0-255 range
+	0 - Successful Completion:
+	Non zero status code -  abnormal termination of program (error)
+___________________________________________________________________________________________________________________________________________________________________________
+
+stdin , stdout , stderr : 
+input, output, and error messages that helps for standardized communication between programs and user, or between two programs or process.
+
+stdin- accepting input from the user or from another program.
+stdout - sending output from the user or from another program.
+stderr- Sending standardized error output from program / user to another programs.
+___________________________________________________________________________________________________________________________________________________________________________
+
+DNS: Domain name system is the hierarchical naming system which is used to translate a human readable domain name to an IP address understood by the machines.
+	First the domain name is sent to the DNS server for getting the proper IP address. And it caches the ipaddress in the users system.
+
+ipv4 - 32 bits in length
+ipv6 - 128 bits in length. Allows for a greater number of connected devices in internet.
+
+URL: Uniform resource locator  
+
+URL parts consists of:-
+1.Scheme: https,https (Specifies the protocol used)
+2.Hostname: The hosted server /domain name
+3.port - If given
+4.path: Specifies the resource in the server.
+5.Query parameters
+6.Fragment identifier
+
+https port - 443 
+http port  - 80 
+___________________________________________________________________________________________________________________________________________________________________________
+
+SSH - SSH stands for Secure Shell. 
+It is a secure cryptographic network protocol for communication between two devices over the internet.
+
+It provides security , authentication , encryption , access from anywhere etc.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Forward proxy:
+It sits between the Client and the Internet. Helps to secure the users IP
+
+Reverse proxy:
+It sits between the internet and the web server.
+Helps to secure the server Ip and details.
+Can cache some of the frequent requests by a client.
+Helps for load balancing.
+___________________________________________________________________________________________________________________________________________________________________________
+
+PM2:
+PM2 allows you to manage Node.js processes effectively. It restarts automatically if there is any error or crash happens.
+___________________________________________________________________________________________________________________________________________________________________________
+
+JWT claims:
+	 are different sections in the JWT payload which contains separate data's.
+1. Registered claim 
+2. Public claim
+3. Private claim
+
+___________________________________________________________________________________________________________________________________________________________________________
+
+XSS- Cross site scripting is a vulnerability used by the attackers where they inject malicious script into the webpage which allows for stealing of the users authentication details.
+___________________________________________________________________________________________________________________________________________________________________________
+
+USER AGENT:
+It is a header in the request sent by a client to the server , which includes users details like Browser details like version and name , Operating system etc.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Browser Caching: 
+	Browser caching helps improve website performance and speed by reducing the amount of time it takes to load web pages. By storing resources locally, the browser can quickly access them without needing to make additional requests to the server.
+___________________________________________________________________________________________________________________________________________________________________________

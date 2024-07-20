@@ -1,0 +1,515 @@
+https://www.mongodb.com/docs/v6.2/reference/glossary/             M O N G O  D B :
+
+MongoDB is a document database and can be installed locally or hosted in the cloud. ( non-tabular database )
+
+The MongoDB Query API can be used two ways:
+CRUD Operations  
+Aggregation Pipelines
+
+mongodb uses mozillas spidermonkey js enigine. 
+____________________________________________________________________________________________________________________________________________________________
+ 
+mongod is used to create and initiate a new MongoDb server instance which manages and handles database requests.
+
+mongo is used for interaction of users with the mongodb database. For performing database operations like crud operations and aggregations.
+
+mongod is the core database process, mongos is the routing service for sharded clusters, and mongosh is the shell for interacting with MongoDB. 
+____________________________________________________________________________________________________________________________________________________________
+
+JSON - BSON - Extended - JSON
+
+JSON - Javascript object notation.
+Only 6 data types are supported :- String , Number , Boolean , array , object , Null
+
+Json is basially a string,Mainly used for data exchange between servers and clients ,server to servers etc.
+All keys must be in double quutes " "
+
+JSON.parse() => for converting json to object
+JSON.stringify() => for converting object to json
+____________________________________________________________________________________________________________________________________________________________
+
+BSON: (Binary JSON)
+Documents in the database are stored in BSON format
+BSON can store more than 6 data types.
+
+Bson data-types: Double,integer , decimal , null , regex , undefined.
+____________________________________________________________________________________________________________________________________________________________
+
+Extended Json:
+It is used to represent BSON data in readable format.
+____________________________________________________________________________________________________________________________________________________________
+ db.createCollection('name')  //For creating a new collection.
+show collections 		//For showing the created collections.
+show dbs
+db.name.drop()  		// for dropping a created collection
+db.dropDatabase()		// for dropping database
+use db
+____________________________________________________________________________________________________________________________________________________________
+
+Query operators:
+ used in queries to filter documents based on specific criteria.
+
+$eq: Matches values that are equal to a specified value.
+$ne: Matches values that are not equal to a specified value.
+$gt: Matches values that are greater than a specified value.
+$lt: Matches values that are less than a specified value.
+$gte: Matches values that are greater than or equal to a specified value.
+$lte: Matches values that are less than or equal to a specified value.
+
+(in these we use array of object - [ {} , {} , {} ]
+$and: Joins query clauses with a logical AND.
+$or: Joins query clauses with a logical OR.
+$not: Inverts the effect of a query expression.
+$nor: Joins query clauses with a logical NOR.
+
+$exists: Matches documents that have the specified field.
+$type: Matches documents that have a field of a specific type.
+
+(In these we use array of values [ x , y, j ] )
+$in: Matches any of the values specified in an array.
+$nin: Matches none of the values specified in an array.
+$all: Matches arrays that contain all the specified values.
+
+$text: Performs a full-text search on the specified field or fields.
+
+db.books.find({ title: { $regex: /Mockingbird/i } })		//Regex for words containing a given string
+regex can be used for pattern matching of the values in a field.
+
+db.books.find({title:{$regex:/^T/}})				//Regex for first letter
+db.books.find({title:{$regex:/e$/}})				//For last letter regex
+____________________________________________________________________________________________________________________________________________________________
+
+Helper methods:
+These methods have to be chained with the search query at the end.
+
+distinct: db.books.distinct("author") For finding distinct values of selected fields.
+____________________________________________________________________________________________________________________________________________________________
+
+projection: Used to specify which all fields should be returned in the query.
+$substr: It is used for getting a substring from a string in mongodb.
+	{ $substr: [ <stringExpression>, <startIndex>, <length> ] }
+db.books.find({ },{ title:{ $substr:["$title",0,3] } , _id:0 })
+____________________________________________________________________________________________________________________________________________________________
+
+$slice : In mongoDB the slice operator is used to project a part or specific number of array elements in an array.
+Positive numbers are used to select from the starting of the array , and vice versa negative numbers are used to select from the end of the array.
+db.posts.find({}, { comments: { $slice: 2 }, _id: 0 })
+____________________________________________________________________________________________________________________________________________________________
+
+$sample: sample stage in aggregation is used to select a document from a collection randomly.
+db.books.aggregate([{ $sample: { size: 1 } }, { $project: { title: 1, author: 1, _id: 0 } }])
+
+{ $sample: { size: 1 } }
+The size 1 ensures that each document have an equal chance of selection.
+____________________________________________________________________________________________________________________________________________________________
+
+Update operators:
+$set: Sets the value of a field in a document.
+$unset: For removing a field from a document. 	 db.books.updateOne({year:2024},{$unset:{year:true}})
+$inc: For increasing the number in a field.
+$rename: For renaming a field name.
+	db.books.updateOne({title:'1984'},{$rename:{title:'Heading'}})
+$mul: The mul operator is used to multiply the value of a field by a specified amount.
+$currentDate: This operator sets the value of a field to the current date.
+$min: Updates the value of a field to a specified value if the specified value is less than the current value.
+$max: Updates the value of a field to a specified value if the specified value is greater than the current value.
+$pop: Removes the first or last element from an array field.
+$pull: For removing a single value's multiple instances in the array.
+	db.collection.updateMany(
+   { myArray: { $exists: true } },
+   { $pull: { myArray: 3 } }
+	)
+
+$pullAll: For removing multiple value's multiple instances from an array.
+
+$push: For pushing elements into an array
+
+we use $each and not pushAll for push multiple elements in to an array.
+db.collection.updateOne(
+   { name: 'Nazim' },
+   { $push: { myArray: { $each: [5, 6, 7], $position: 0 } } }
+)
+
+
+$addToSet: 
+	This operator is used to push elements into an array , it only adds the element if it is not already present in the array.
+ db.names.updateOne({_id:4} , {$addToSet:{ages:{$each:[ 35, 40, 36, 28, 33 , 1111 ]}}} )
+____________________________________________________________________________________________________________________________________________________________
+
+Aggregation framework:
+	Using aggregation framework we can take documents in our collection , create subsets of the documents and produce brand new documents at the end.
+The aggregation framework provides a powerful set of tools for performing data transformations and analysis on the documents within a collection.	 
+
+db.persons.aggregate([ {},{},{},{} ])
+____________________________________________________________________________________________________________________________________________________________
+
+Cursor: Cursor is like a pointer which points to the results of a query and the result is got by iterating over the cursor.
+	It provides methods like hasNext(),next() and forEach(). Also it performs lazy loading. Such that the result is only loaded when it is iterating at that point.
+____________________________________________________________________________________________________________________________________________________________
+
+$project:Reshapes the document by including, excluding, or renaming fields. 	{ $project: { newField: 1, existingField: 1, _id: 0 } }
+	 db.persons.aggregate([ { $project: { newAge: '$age' , 'company.title': true , _id:false} }] )  //For renaming the projected field.
+
+db.persons.aggregate([ { $project: { newAge: '$age' ,_id:false , personalInfo:{eyeIs:'$eyeColor' , title:'$company.title'}} }] ) 
+	for projecting nested elements in a document.
+____________________________________________________________________________________________________________________________________________________________
+
+$match: Filters documents based on specified criteria. 				{ $match:{age:{$gt:25}} }
+____________________________________________________________________________________________________________________________________________________________
+$group: Groups the documents based on a specified key and performs aggregation on the grouped data.	{$group:{_id:'$gender',total:{ $sum : '$age'} }
+   _id is mandatory in each group stage.
+
+Group by nested fields:>>  db.persons.aggregate([ {$group :{_id: {age:'$age' , eyeColor: '$eyeColor'}} }])
+____________________________________________________________________________________________________________________________________________________________
+$sort: For sorting the aggregated documents.  					{ $sort: {name:-1 , gender:1 } }
+$limit and $skip: Limits the number of documents in the output and skips a specified number of documents in the input. {$limit:5} , {$skip:6}
+____________________________________________________________________________________________________________________________________________________________
+$lookup: Performs a left outer join with another collection in the same database.   { $lookup:{	 
+												from:"anotherCollectioName"
+												localField:"localField",
+												foreignField:"foreignField",
+												 as:'newNameOfField'
+												} }
+____________________________________________________________________________________________________________________________________________________________
+$addFields: Adds a new field to a collection.					{ $addFields: {newField:'value'} }
+
+$facet : Allows us to perform multiple aggregation pipelines within the same stage. 	{    $facet: {
+         											facet1: [/* aggregation pipeline 1 */],
+         											facet2: [/* aggregation pipeline 2 */]
+      													}
+  												}
+____________________________________________________________________________________________________________________________________________________________
+
+$out: Writes the result of the aggregation pipeline to a specified collection.   	{ $group: { _id: "$field", count: { $sum: 1 } } },
+     If the collection specified in $out already exists, it will be overwritten.  	{ $out: "outputCollection" }				   
+____________________________________________________________________________________________________________________________________________________________
+
+$sample: Randomly selects specified number of documents from a collection.   { $sample: { $size:5 } } 
+____________________________________________________________________________________________________________________________________________________________
+
+$merge: Merges the results of the aggregation pipeline into an existing collection or a new collection.	{ $merge: "outPutCollection" }	
+	If the target collection specified in $merge already exists, you can specify additional options like whenMatched, whenNotMatched, and let to control how documents are merged.
+
+	{$merge: { into:'mergedCollection' , whenMatched:'merge' , whenNotMatched:'insert' } }
+____________________________________________________________________________________________________________________________________________________________
+
+Aggregation Expressions: 
+Refers to the name of the field in the input queries or document.
+___________________________________________________________________________________________________________________________________________________________________________
+
+COUNT in mongodb:
+	 db.persons.find().count()
+	 db.persons.aggregate([ { $count:'persons' } ])
+	 db.person.aggregate([]).toArray().length
+	 db.person.aggregate([]).itcount()
+	count() is a wrapper to the $count stage in aggregation.
+___________________________________________________________________________________________________________________________________________________________________________
+
+unary operator:
+	We can find the BSON types of required or specified fields.
+___________________________________________________________________________________________________________________________________________________________________________
+
+allowDiskUse: 
+	All aggregation stages can use maximum of 100mb of RAM . If this limit is exceeded then server returns an error.
+By using allowDiskUse allows the stage datas to be stored in the temporal files.
+
+ db.persons.aggregate([ { } ], { allowDiskUse: true } )
+___________________________________________________________________________________________________________________________________________________________________________
+
+INDEXES:
+Indexes improve mongoDb query execution. Without index mongoDB has to scan whole collection. (COLLSCAN)
+
+Index stores sorted field values, if done properly it uses ( IXSCAN )
+
+	db.persons.createIndex({ age : 1 })
+	
+Options in index creation: 
+{ background: true}:It creates index in the background without blocking the other query operations. Otherwise index creation process will interrupt other query operations.
+This can be beneficial for large collections where creating an index may take a significant amount of time.
+
+{ unique: true } This option will create unique indexes
+
+{ name: 'customName' } : For adding custom name to the index.
+
+getIndexes() :Return the existing indexes of the current collection. 
+___________________________________________________________________________________________________________________________________________________________________________
+
+explain():
+In MongoDB, the explain method is used to obtain information about the execution of a query, including details about the query plan, index usage, and other performance-related metrics. By using explain, you can analyze and optimize your queries to improve their performance.___________________________________________________________________________________________________________________________________________________________________________
+
+stats()
+Returns various details and informations on the current collection like namespaces, count, also information on the indexes.
+___________________________________________________________________________________________________________________________________________________________________________
+
+For deleting indexes:
+  1. db.collection.dropIndex({ fieldname: 1})
+	2. db.person.dropIndexes()
+___________________________________________________________________________________________________________________________________________________________________________
+___________________________________________________________________________________________________________________________________________________________________________
+
+Covered query:
+	It is a type of query in which all the fields required in a query are covered by an index. Such that the required data can be directly retrieved from the index and no need to access the entire documents in a collection.
+* Improves query performance. and reduces Disk I/O
+
+DISADVANTAGES:
+	Keeping too much fields in the index can cause index overloading which inturn uses more disk space.
+	The insertions, updations and deletions in the database should be reflected to the fields covered in the indexes also. Which creates complexity if large number of fields are covered in the index.
+Index need to be monitored and maintained as time passes and the data in the database changes else it causes index fragmentaion.
+___________________________________________________________________________________________________________________________________________________________________________
+ 
+Disadvantages of Indexes:
+	Increased Storage Requirements
+	Write Performance Impact
+	Over-indexing
+	Index-fragmentaion
+	Updating indexes based on updates to the database
+___________________________________________________________________________________________________________________________________________________________________________
+
+Indexes:
+	Single field index: It collects and sorts the data from a single field in each document in a collection.
+		db.products.createIndex({ name: 1 })
+
+	Compound Indexes: It collects and sorts the data from multiple fields in each document in a collection.
+		db.products.createIndex({ category: 1, price: 1 })
+		
+	Multikey indexes: collect and sort data from fields containing array values. Multikey indexes improve performance for queries on array fields.
+		db.persons.createIndex({ interests: 1 })    where interests is an array
+__________________________________________________________________________________________
+	Text-indexes: It is a special type of index which supports full text search queries on string content. It allows us to efficiently search for documents havnig 	specific texts or words.
+	db.persons.createIndex( { fieldToIndex : 'text'} )
+	db.persons.find({$text: { $search:'textcontent'} })
+
+	Tokenization: Text-indexes use tokenization by which the text are split into several words or terms and are then indexed.
+	It emits stop words like and , the , is before indexing to save space.
+	Text indexing are also case insensitive.
+__________________________________________________________________________________________
+	
+	Wildcard Indexes: Are used when the field name is either unknown or may change over time.
+	db.persons.createIndex({"$**": 1 })
+___________________________________________________________________________________________
+
+	Geospatial indexing: They are used to create specialized indexes for efficient querying of datas related to points,lines and polygons on plane or a sphere.
+		Used for working with location based query and also for mapping and distance problems.
+		
+	1. 2d Index: Suitable for flat planar geometry 
+		db.collection.createIndex({ location: "2d" });
+	2. 2d Sphere Index: Suitable for complex points, shapes and lines in spherical surfaces.
+		db.collection.createIndex( {location:"2dsphere"})
+___________________________________________________________________________________________
+
+	Hashed indexes: Hashed indexes collect and store hashes of the values of the indexed field.
+		db.collection.createIndex( { field: "hashed" } )
+	
+	They are optimized for equality matches.  And also they cant be optimized for sorting and regex operations. They also consume more space than normal hashing.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Reconcilation:
+In MongoDB replica sets, reconciliation involves ensuring that all secondary nodes have replicated the changes made to the primary node.It ensures data consistency and availabilty.
+
+In sharding , reconcilation ensure all tha shards contain consisitent and continous data available. It keeps on updating based on the write operations.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Orphaned documents:
+ Orphaned documents are documents that exist in a collection but are not referenced by any other documents in the same collection or in related collections through references or relationships.
+___________________________________________________________________________________________________________________________________________________________________________
+
+BSON DATA-TYPES:
+	There are almost 19 BSON data types. Array , string , object , regex , boolean , binary , minKey , maxKey , Timestamp , int32 , symbol ,null , integer ,int64
+___________________________________________________________________________________________________________________________________________________________________________
+
+$- The dollar operator in mongoDB is used to perform queries based on field values and also to give a reference to the field.
+	$ can also be used in most operators like $gt , $lt , $push $pull etc..
+___________________________________________________________________________________________________________________________________________________________________________
+
+Journaling: It is a type of safety feature in mongoDB which provides a way to recover data in the event of a crash. such that it saves the applying changes to the journal on the disk , so that even if mongoDB crashes or terminates the data will be safely accessible on the previous consistent state.
+
+WAL: Write ahead logging: MongoDB first writes the operation to the journal file before applying the change to the data files on disk.
+___________________________________________________________________________________________________________________________________________________________________________
+
+db.dropDatabase()
+db.collectionName.drop()
+___________________________________________________________________________________________________________________________________________________________________________
+
+$expr - The $expr operator in mongoDb is used to carry out aggregation expressions in the normal query language , allowing for complex queries.
+	db.perosns.find({ $expr: { $eq: ['$field1' , '$field2'] })
+___________________________________________________________________________________________________________________________________________________________________________
+
+$min and $max are used in $group stage in aggregation and also in updateOne / updateMany query operations.
+	db.persons.aggregate([ {$group:{_id:'$title'}, Max:{$max:'$price' }} ])
+	db.persons.updateOne({_id:'1234'} , {$min:{age:22}} )
+___________________________________________________________________________________________________________________________________________________________________________
+
+$first , $last  ,$avg:  Used in GRoup stage in aggregation:
+	db.persons.aggregate([ { $group: { _id:'$isActive' , first:{$first:'$eyeColor'}}} ])
+	db.persons.aggregate([ {$group:{_id:'$isActive'} , Last:{$last:'$eyeColor'}} ]) 
+___________________________________________________________________________________________________________________________________________________________________________
+$inc:
+	db.persons.updateOne({age:10},{$inc:{age:1}} )
+___________________________________________________________________________________________________________________________________________________________________________
+
+Sharding:
+	It is a method used by mONgoDb to distribute its large data sets across multiple machines or servers. It is done when a server contains large datasets and the I/O query load will be too much for that single server. Which leads to reduce in performance.
+
+vertical scaling:
+	It involves upgrading the current server by using a more powerful CPU , adding more RAM and also increasing storage capacity. It have a limitation in scaling when compared to horizontal scaling.
+More expensive.
+
+
+horizontal scaling:
+	It involve using of multiple servers by splitting the large data set in to multiple subsets of data , stored each in differnt servers. It increases performance as each subset of data is in differnt servers so the query and retrieving of data will  be faster.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Shards: Each different subsets of the large dataset in each server is called shards. And each shard must be deployed as a replica set.
+	Each server in sharding is called shards. 
+
+The data is partitioned in a range base during sharding. 
+
+
+A loadbalancer balances the shards in each server.It also ..
+Split and migrate : When the data in a shard increses too much then it splits into different sub data sets and migrates it into new shards. And the migrated datasets are removed from the previous shard.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Logical Shard: The logical subset of data chunks stored in shard is called logical shards. It is like a rules set for the storing of physical shards.
+Physical Shard: The subset of data stored in the shard is called Physical shard.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Shard key : It is the field which is selected on which the partition of the data sets happen on range basis. Once a shard key is created , it cannot be changed.
+		A field which is commonly used in queries are taken as shard key.
+
+Each documents in a shard contains a shard key which is indexed , which helps for query routing to the respective shards. Each shards will be indexed by its shard keys.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Sharding process:
+	Config Servers: Small mongods where metadata and configuration information related to sharding are stored.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Replica sets:
+	Replica sets are implemented to provide high availability and data redundancy for each shards in a cluster.Each replica set contain a primary node that recieves all write operations and forwards changes to the secondary nodes. If a primary node becomes unavailable then one of the secondary nodes becomes a new primary node.
+
+The primary node updates the changes to the secondary node asynchronously. 
+___________________________________________________________________________________________________________________________________________________________________________
+
+Atomicity: In mongo db a series of operation are treated as a single unit of work. Such that if any one opertion fails everything fails and it restores it to the previous consistent state.
+
+	const session = db.getMongo().startSession();
+	session.startTransaction();
+	session.commitTransaction();
+		OR 
+	sessiom.abortTransaction();
+___________________________________________________________________________________________________________________________________________________________________________
+
+Capped collection :
+	They are special type of collection which have a fixed size. They are designed to store a fixed amount of documents and if the collection limit exceeds it overwrites the older documents with new documents.
+Mainly used for storing log details , and for uses where we need recent details only.
+db.createCollection('Names', {capped:true , size:1000 } )
+___________________________________________________________________________________________________________________________________________________________________________
+
+Grid FS: It is a specification for storing and retrieving of files , if it exceeds the BSON document size limit of 16MB. It allows you to split your large file into multiple chunks , where each small chunk is stored in separate documents. It is helpful for storing images, videos and other files of large sizes.	
+
+Files are stored in two collections >
+	 1. fs.files: This collection stores the metadata ,such as filename, filesize , chunk size and content type.
+	 2. fs.chunks: THis collection stores the actual chunks and each chunk is stored in seperate documents.
+
+By default chunk size of 255 kB
+___________________________________________________________________________________________________________________________________________________________________________
+
+CAP Theorem:
+	It is a fundamental principle theorem in Distributed database designs which includes Consistency , Availability and partition tolerance.
+	Consistency : Consistent and same data available in all the nodes or servers.
+	Availability: Every node or sever will be available at all time for request and response.
+	Partition tolerance: It is the ability of a system to continue operating even after several network partition.
+
+Network partition: ( when servers cant communicate with each other due to network failures)
+___________________________________________________________________________________________________________________________________________________________________________
+
+TTL indexing : Feature in mongoDB which allows to automatically delete documents in a collection after a specified time.
+	 This is particularly useful for scenarios where data is only relevant for a limited period, such as session data, cache data
+
+Make sure that the field you are indexing for TTL (in this case, "createdAt") contains a Date type value for proper functioning of the TTL index.
+
+	db.persons.createIndex({ createdAt:1 },{expireAfterSeconds:3600})
+___________________________________________________________________________________________________________________________________________________________________________
+
+In mongoDB atomicity is carried out on document level , such that a document will be added only if all the fields are added. Atomicity ensures that if an operation is updating a document , either all of the updates are added or none.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Normalization and Denormalization are two database design technique used to organize data in a relational database system. While NoSQL doesn't support normalization like an SQL database , still it can achieve similar design to normalization.
+
+Normalization : it is the design where a large document is split into multiple smaller documents and are joined or connected with each other with object Ids as reference.
+
+Denormalization: It is the design where every redundant data and fields are embedded in a single large document without the use of reference using objectIDs.
+	It is useful for cases where data read performance is critical.
+__________________________________________________________________________________________________________________________________________________________________________
+
+MONGO DB UTILITIES:
+	mongodump: Used to create	 a binary export of the documents in the database. It creates a binary dump of that files in BSON format.
+	mongorestore: Used to restore/ import back the files and documents previously backed up by the mongodump utility.
+
+	mongoexport: It is used to export mongodb data and documents from the database as JSON , CSV , or TSV formats.
+	mongoimport: It is used to import CSV , JSON or TSV files to the database.
+
+	mongotop: Command line utility which provides real time details of data on a database instance like i/p and o/p of each collection.
+	mongostate: Command line utility to view real time performance of a database instance.
+
+	mongostore: Command line utility used to restore the data/files backups by mongodump and mongoexport.
+___________________________________________________________________________________________________________________________________________________________________________
+
+Election in MongoDB:
+	WHenever the primary node in a replica set is down. Then one of the secondary node has to be replaced as the primary node , this selection processs is knwon as election.	
+	The election takes place by :   1. The priority will be considered.
+					2. More uptime
+					3. Recent oplog (checks which server connected last with primary)
+					4. Proximity with the primary server. (The closest to the primary server)
+					5. Random election for the tied servers by all members of the replica set.	
+
+Secondary servers communicate with each other for checking the status of each other weather the server is running or down. 
+___________________________________________________________________________________________________________________________________________________________________________
+
+Views: Are read-only results of a query from a collection. Views provides data security by providing the users only read-only access.
+___________________________________________________________________________________________________________________________________________________________________________
+
+arbiter: A member of a replica set that exists solely to vote in elections Arbiters do not replicate data.
+___________________________________________________________________________________________________________________________________________________________________________
+
+B-tree
+A data structure commonly used by database management systems to store indexes. 
+___________________________________________________________________________________________________________________________________________________________________________
+
+profiler: It is a mongoDB diagnostic tool used to analyze and monitor the performance and progress of a database operation.
+
+MongoDB supports three levels of profiling:
+Level 0: Profiling is off (default).
+Level 1: Captures slow operations that exceed a specified threshold.
+Level 2: Captures all operations, regardless of their execution time.
+___________________________________________________________________________________________________________________________________________________________________________
+
+ bulk write: Batching together multiple write operations in mongodb to execute in a single operation is called Bulk write.
+___________________________________________________________________________________________________________________________________________________________________________
+
+ json schema : JSON Schema is a content specification language used for validating the structure of a JSON data. It helps to create a more human readable and machine readable JSON data.
+___________________________________________________________________________________________________________________________________________________________________________
+
+elemMatch: The $elemMatch operator is used to match documents where at least one array element meets multiple criteria simultaneously.
+___________________________________________________________________________________________________________________________________________________________________________
+
+-{new : true}
+option that you can pass to certain operations, such as findOneAndUpdate() or findOneAndDelete(), to specify that you want to return the updated document after the operation has been performed.
+___________________________________________________________________________________________________________________________________________________________________________
+
+$cond:
+db.people.aggregate([ { $project: { name: 1, result: { $cond: { if: { $gte: [ '$age', 30 ] } , then: 'Old', else: 'Young' } }} }] ) 
+___________________________________________________________________________________________________________________________________________________________________________
+
+View and out:
+View : Updates itself if there is any change in the viewed table or collection. Does not have its own storage or memory. It just loads at the instance.
+out : Creates or updates a separate collection where further operations can take place.
+___________________________________________________________________________________________________________________________________________________________________________
+
+wiredTiger: Default storage engine used in mongodb.
+	    It helps for data storage and retrieval in mongoDb efficiently. Better performance than previous storage engine.
+	    Allows concurrent querying and data retrieval.
+___________________________________________________________________________________________________________________________________________________________________________
+
+d0: 
+The term "d0" in MongoDB typically refers to the primary shard of a sharded cluster. This primary shard is responsible for storing the unsharded collections and any newly created sharded collections that have not yet been migrated to other shards.
+___________________________________________________________________________________________________________________________________________________________________________

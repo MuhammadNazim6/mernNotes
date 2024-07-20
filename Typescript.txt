@@ -1,0 +1,371 @@
+TYPESCRIPT:	 Open source JS prog language, which is a superset of Javascript - developed by microsoft 
+
+Allows us to write code in js so that our code faces less error during runtime.
+Used for type safety.
+
+It is a super set of javascript.
+Detects error in code without running.
+
+For identifying: uncalled functions, basic logic errors, typos
+____________________________________________________________________________________________________________________________________________________________
+
+Type annotations:
+	They are specified using a colon (:) followed by the desired data type. 
+
+Type assertions: 
+	They are mainly used in scenarios where TypeScript cannot accurately determine the type of a value. And we assign types to those values.
+____________________________________________________________________________________________________________________________________________________________
+
+Infer Types (Implicit types):
+	Typescript assigns the types of variables by detecting automatically is knows as infer types.
+
+Defining types: (Explicit types):
+	let username: string = "Debug media";
+
+	let skills: string[] = ["JS","MongoDB"]
+
+	let details : {name:string , age:number} = {name:'nazim' , age:44 }
+____________________________________________________________________________________________________________________________________________________________
+
+Interface: In TS interface is a structure or design to an object. It allows us to specify the data types of each element in an object should have.
+	
+interface Details {
+	name: string;
+	age: number ;
+	married: boolean ;
+	getName: ()=> void;
+}
+
+let UserDetails : Details = {name:'nazim' , age:44 , married: true , getName: ()=>{ console.log(this.name) }}
+
+____________________________________________________________________________________________________________________________________________________________
+
+TYPE :
+type Details = {
+	name: string;
+	age: number ;
+	married: boolean ;
+	getName: ()=> void;
+
+}
+
+	number | string 	Union operator for multiple typed attribute.
+	salary ?: number  	Optional data type
+
+Used to create a custom named type which can be used in multiple cases.
+____________________________________________________________________________________________________________________________________________________________
+	
+Function overloading: Allows to specify multiple function signatures for a single function implementation. ( For specifying multiple datatypes as arguments and return values.
+
+function add(x: number, y: number): number;
+function add(x: string, y: string): string;
+function add(x: any, y: any): any {
+    if (typeof x === 'number' && typeof y === 'number') {
+        return x + y;
+    } else if (typeof x === 'string' && typeof y === 'string') {
+        return x.concat(y);
+    } else {
+        throw new Error("Unsupported types for addition.");
+    }
+}
+____________________________________________________________________________________________________________________________________________________________
+
+Generics: <T>  
+	They enable you to define types that are not specific to a particular data type, but rather adaptable to any type provided during usage.
+
+function newFun<T>(age:T):T {  
+	return age; 
+}
+
+let resultAge = age<number>(55);
+
+let resultAge2 = age<string>('55');
+____________________________________________________________________________________________________________________________________________________________
+
+Merging two types:
+
+type UserDetail = {
+	name:string;
+	age:number;
+}
+
+type AdminDetail = UserDetail & {
+	role: string
+}
+____________________________________________________________________________________________________________________________________________________________
+
+tsc --noEmitOnError hello.tst
+For specifying that js file should not be formed if there is any type of error.
+____________________________________________________________________________________________________________________________________________________________
+
+Downleveling:
+In the context of JavaScript, downleveling often refers to converting code that uses newer ECMAScript features (ES6 and beyond) into equivalent code that works in older environments or browsers that may not support those features.
+____________________________________________________________________________________________________________________________________________________________
+
+noImplicitAny:
+Turning on the noImplicitAny flag will issue an error on any variables whose type is implicitly inferred as any.
+____________________________________________________________________________________________________________________________________________________________
+
+strictNullChecks:
+The strictNullChecks flag makes handling null and undefined more explicit, and spares us from worrying about whether we forgot to handle null and undefined.
+____________________________________________________________________________________________________________________________________________________________
+
+void is used to indicate that a function doesn't return any value, while never is used to indicate that a function never produces a value or completes its execution normally.
+____________________________________________________________________________________________________________________________________________________________
+
+const data : (number | string) [] = [1,2,3,4,'kk']
+For adding multple types of array elements in a same array.
+____________________________________________________________________________________________________________________________________________________________
+
+Tuples: 
+In TS it is used to store a collection of elements of specific datatypes in a precise order.
+type TUP = [number,string,number]
+____________________________________________________________________________________________________________________________________________________________
+
+enums:
+In TypeScript, enums offer a way to define a group of related named constants, making the code more readable, maintainable, and self-documenting. 
+Enums are particularly useful when you have a fixed set of values that are logically related to each other.
+____________________________________________________________________________________________________________________________________________________________
+
+reopening of the interface:
+Adding types to the same interface by redeclaring it is called reopening.
+interface Person {
+    name: string;
+}
+
+interface Person {
+    age: number;
+}
+
+____________________________________________________________________________________________________________________________________________________________
+
+Inheriting interfaces for getting similar properties from another interface.  
+
+interface Dog extends Animal , Birds {  ....   }
+____________________________________________________________________________________________________________________________________________________________
+
+Access modifiers:
+private, public and protected: To control the visibility of class members.(properties and methods) 
+
+private, it can only be accessed within the class where it is defined.
+
+class User{
+  constructor(public name:string,public age:number){
+    this.name = name
+    this.age = age
+  }
+} 
+
+			OR
+
+class User{
+  name:string
+  age:number
+  constructor(name:string,age:number){
+    this.name = name
+    this.age = age
+  }
+}
+
+protected can be accessed from the same class and also from the class where it gets inherited.
+____________________________________________________________________________________________________________________________________________________________
+
+Getters and setters:
+
+GET: SHOULD HAVE A RETURN VALUE
+ get getAppleEmail():string{
+    return `Apple${this.email}`
+  }
+_________________________________________________________________________________
+
+SET: SHOULD HAVE A SINGLE ARGUMENT  AND NO RETURN TYPE
+set setName(name:string){
+    this.name = name
+  }
+
+newObj.setName = 'Ninja Hattori
+____________________________________________________________________________________________________________________________________________________________
+
+Implements:
+It can be used to inherit the features and type definings from an interface to a class.
+
+class Instagram implements SocialMedia{ }
+____________________________________________________________________________________________________________________________________________________________
+
+Abstract class:
+Abstract classes are used to maily provide a blueprint, and object can only be created from the classes which are extending that class.
+Provide a way to define partially implemented classes and methods. And allows only the classes that inherits to initialize the class and methods.
+____________________________________________________________________________________________________________________________________________________________
+
+Generics:
+In TypeScript (TS), the term "generic" refers to a feature that allows you to create reusable components or functions that work with a variety of types rather than a single one.
+It is used to assign the same type for the return values as the type of the arguments.
+	
+function getProductsSearch<T>(products: T[] ): T {  return products[index] }	
+
+const getSearchProducts = <T>(products: T[]):T=>{  }
+____________________________________________________________________________________________________________________________________________________________
+
+Extendiing interfaces in generics:
+
+interface Database{
+  name:string;
+  isBro: boolean
+}
+
+const getData = <T,U extends Database >(first:T,secnd:U):T=>{
+
+  return first
+}
+
+console.log(getData(44,{name:'nazim',isBro:true}));
+
+____________________________________________________________________________________________________________________________________________________________
+
+Type narrowing : 
+Achieved through type gurads which narrows down the parameter types during the run time by using typeof operators in js. It makes sure that the coming variables will be of certain types after type guard.
+____________________________________________________________________________________________________________________________________________________________
+
+Type guards:
+	 in TypeScript are runtime checks used to narrow down the type of a variable within a specific code block, facilitating more precise type inference and enabling safer code execution.
+
+Type guards are particularly useful when dealing with types like null, undefined, and arrays. They help narrow down the types of variables based on runtime checks, allowing for safer and more predictable code.
+As all these types after checking will show as objects.
+____________________________________________________________________________________________________________________________________________________________
+
+
+in : Operator in TS
+It is commonly used to check weather a property is present in an declared object.	
+
+
+interface Hello{
+  name:string;
+  age:number;
+}
+
+const person:Hello = {
+  name:'nazim',
+  age:56
+}
+
+if('age' in person){
+  console.log('Age is in person');
+  
+}else{
+  console.log('Not in person');
+}
+
+____________________________________________________________________________________________________________________________________________________________
+
+Instanceof :
+instanceof is used to check weather an object is an instance of a class where the types of that object have been defined.
+
+function logValue(x: Date | string) {
+  if (x instanceof Date) {
+    console.log(x.toUTCString());
+               
+(parameter) x: Date
+  } else {
+    console.log(x.toUpperCase());
+               
+(parameter) x: string
+  }
+}
+____________________________________________________________________________________________________________________________________________________________
+
+Mixins:
+	Mixins in TypeScript allow you to add functionality to a class by combining multiple classes. This is particularly useful when you want to reuse code across multiple classes without using inheritance. 
+
+// Mixin 1
+class Jumpable {
+    jump() {
+        console.log("Jumping!");
+    }
+}
+
+// Mixin 2
+class Swimmable {
+    swim() {
+        console.log("Swimming!");
+    }
+}
+
+
+class Athlete implements Jumpable, Swimmable {
+    // Using mixin methods
+    jump: Jumpable["jump"];
+    swim: Swimmable["swim"];
+    run: Runnable["run"];
+
+    constructor() {
+        // Assigning mixin methods to instance methods
+        this.jump = Jumpable.prototype.jump.bind(this);
+        this.swim = Swimmable.prototype.swim.bind(this);
+        this.run = Runnable.prototype.run.bind(this);
+    }
+}
+
+
+____________________________________________________________________________________________________________________________________________________________
+
+Decorators: 
+	Powerful feaure offered by TS. Which extends the features of the class. 
+It extends the features of the class to a seperate function which have access to the class constructor.
+
+function Title(constructor:Function){
+	console.log('Title for the class');
+	constructor();
+	
+}
+
+@Title
+class Person{
+	name = 'jubair'
+	constructor(){
+		console.log('Created an instance');
+		
+	}
+}
+____________________________________________________________________________________________________________________________________________________________
+
+Is it possible to create the static classes in TypeScript?
+	No, it is not directly possible to create static classes in TypeScript. But can be achieved by creating a class whose properties and methods are static.
+	
+class News{ 
+	static xname:string = 'nazim';
+}
+
+console.log(News.xname);
+____________________________________________________________________________________________________________________________________________________________
+
+Encapsulation:
+	Bundling of the methods and properties into a single unit called a class is called encapsulation.
+____________________________________________________________________________________________________________________________________________________________
+
+Declare: we use the declare keyword in TypeScript to provide type information for external entities.
+	like jquery etc
+____________________________________________________________________________________________________________________________________________________________
+
+Declaration merging:
+Declaration merging is a feature in TypeScript that allows multiple declarations with the same name to be combined or merged into a single entity. This feature applies to interfaces, namespaces, and classes.
+____________________________________________________________________________________________________________________________________________________________
+
+Polymorphism:
+It allows objects of different type to be treated or identified as instances of the same class.
+____________________________________________________________________________________________________________________________________________________________
+
+declaration fil
+Provides Type Definitions for Libraries written entirely in Javascript.
+____________________________________________________________________________________________________________________________________________________________
+
+A singleton class is a design pattern in software engineering that restricts the instantiation of a class to a single instance. In other words, a singleton class ensures that only one instance of the class exists in the entire application and provides a global point of access to that instance.
+____________________________________________________________________________________________________________________________________________________________
+
+Discriminated unions:
+	This property is used to determine which variant of the union is being used. Discriminated unions leverage TypeScript's type narrowing feature to provide type safety and improved code readability.
+____________________________________________________________________________________________________________________________________________________________
+
+SOLID principle:
+	The SOLID principles are a set of five design principles in object-oriented programming (OOP) intended to make software designs more understandable, flexible, and maintainable.
+____________________________________________________________________________________________________________________________________________________________
+
